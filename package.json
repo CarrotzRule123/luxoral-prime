@@ -1,5 +1,5 @@
 {
-  "name": "io-game-from-scratch",
+  "name": "Luxoral-Prime.io",
   "version": "1.0.0",
   "description": "",
   "main": "src/server/server.js",
@@ -10,7 +10,7 @@
     "start": "cross-env NODE_ENV=production node src/server/server.js",
     "test": "jest"
   },
-  "author": "Victor Zhou",
+  "author": "Jin Wei Tan",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.4.1",
