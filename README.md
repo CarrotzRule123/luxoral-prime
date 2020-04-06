@@ -5,7 +5,7 @@
   <a href="https://luxoralpri.me">https://luxoralpri.me</a>
 </h4>
 
-Luxoral-Prime.io - A primordial underwater world. Created by Jin Wei Tan. Original Idea by u/Peeko32213. Original Framework by Victor Zhou(https://github.com/vzhou842/example-.io-game/)
+Luxoral-Prime.io - A primordial underwater world. <br> Created by Jin Wei Tan. <br> Original Idea by u/Peeko32213. <br> Original Framework by Victor Zhou(https://github.com/vzhou842/example-.io-game/)
 
 Built with [Node.js](https://nodejs.org/), [socket.io](https://socket.io/), and [HTML5 Canvas](https://www.w3schools.com/html/html5_canvas.asp).
 
