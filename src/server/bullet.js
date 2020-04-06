@@ -11,7 +11,7 @@ class Bullet extends ObjectClass {
   // Returns true if the bullet should be destroyed
   update(dt) {
     super.update(dt);
-    return this.x < 0 || this.x > Constants.MAP_SIZE || this.y < 0 || this.y > Constants.MAP_SIZE;
+    return this.x < 0 || this.x > Constants.MAP_WIDTH || this.y < 0 || this.y > Constants.MAP_HEIGHT;
   }
 }
 
