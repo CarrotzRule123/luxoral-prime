@@ -13,20 +13,26 @@ import { setLeaderboardHidden } from './leaderboard';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/main.css';
 
+const position = document.getElementById('position');
 const playMenu = document.getElementById('play-menu');
 const playButton = document.getElementById('play-button');
 const usernameInput = document.getElementById('username-input');
+const xpBar = document.getElementById('xp-bar');
 
 Promise.all([
   connect(onGameOver),
   downloadAssets(),
 ]).then(() => {
   playMenu.classList.remove('hidden');
+  position.classList.add('hidden');
+  xpBar.classList.add('hidden');
   usernameInput.focus();
   playButton.onclick = () => {
     // Play!
     play(usernameInput.value);
     playMenu.classList.add('hidden');
+    xpBar.classList.remove('hidden');
+    position.classList.remove('hidden');
     initState();
     startCapturingInput();
     startRendering();
