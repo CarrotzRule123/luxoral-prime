@@ -89,6 +89,22 @@ button:focus {
   padding: 2px 5px;
 }
 
+#position {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#xp-bar {
+  position: fixed;
+  bottom: 38px;
+  width:100%;
+  text-align:center;
+}
+
 #disconnect-modal {
   position: fixed;
   top: 0;
