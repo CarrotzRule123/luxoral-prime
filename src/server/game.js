@@ -1,24 +1,37 @@
 const Constants = require('../shared/constants');
+const AnimalConstants = require('../shared/animal-constants');
 const Player = require('./player');
-const applyCollisions = require('./collisions');
+const Xp = require('./xp');
+const Collisions = require('./collisions');
+const applyCollisions = Collisions.applyCollisions;
 
 class Game {
   constructor() {
     this.sockets = {};
     this.players = {};
     this.bullets = [];
+    this.xp = [];
+    this.return = {};
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
+  }
+  
+  generateXp() {
+    if(this.xp.length<100){
+      const xp = new Xp()
+      this.xp.push(xp);
+      xp.verify()
+    }
   }
 
   addPlayer(socket, username) {
     this.sockets[socket.id] = socket;
 
     // Generate a position to start this player at.
-    const x = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
-    const y = Constants.MAP_SIZE * (0.25 + Math.random() * 0.5);
-    this.players[socket.id] = new Player(socket.id, username, x, y);
+    const x = Constants.MAP_WIDTH * (0.25 + Math.random() * 0.5);
+    const y = Constants.MAP_HEIGHT * (0.25 + Math.random() * 0.5);
+    this.players[socket.id] = new Player(socket.id, username, x, y, AnimalConstants[0][0]);
   }
 
   removePlayer(socket) {
@@ -47,6 +60,20 @@ class Game {
       }
     });
     this.bullets = this.bullets.filter(bullet => !bulletsToRemove.includes(bullet));
+    
+    //Update Xp
+    this.generateXp()
+    const xpToRemove = [];
+    Object.keys(this.sockets).forEach(playerID => {
+      const me = this.players[playerID];
+      this.xp.forEach(xp => {
+        if(me.distanceTo(xp)<Constants.PLAYER_RADIUS){
+          me.score+=1
+          xpToRemove.push(xp);
+        }
+      })
+    });
+    this.xp = this.xp.filter(xp => !xpToRemove.includes(xp));
 
     // Update each player
     Object.keys(this.sockets).forEach(playerID => {
@@ -99,10 +126,13 @@ class Game {
 
   createUpdate(player, leaderboard) {
     const nearbyPlayers = Object.values(this.players).filter(
-      p => p !== player && p.distanceTo(player) <= Constants.MAP_SIZE / 2,
+      p => p !== player && p.distanceTo(player) <= Constants.MAP_WIDTH / 2,
     );
     const nearbyBullets = this.bullets.filter(
-      b => b.distanceTo(player) <= Constants.MAP_SIZE / 2,
+      b => b.distanceTo(player) <= Constants.MAP_WIDTH / 2,
+    );
+    const nearbyXp = this.xp.filter(
+      x => x.distanceTo(player) <= Constants.MAP_WIDTH / 2,
     );
 
     return {
@@ -110,6 +140,8 @@ class Game {
       me: player.serializeForUpdate(),
       others: nearbyPlayers.map(p => p.serializeForUpdate()),
       bullets: nearbyBullets.map(b => b.serializeForUpdate()),
+      xp: nearbyXp.map(x => x.serializeForUpdate()),
+      return: this.players,
       leaderboard,
     };
   }
